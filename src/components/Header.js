@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 import tickImage from "../assets/images/double-tick.png";
 import noteImage from "../assets/images/notes.png";
@@ -11,10 +12,11 @@ import {
 } from "../features/apiSlice";
 
 export default function Header() {
+  const { status, selectedColors } = useSelector((state) => state.filters);
   const [addToDo] = useAddToDoMutation();
   const [deleteToDo] = useDeleteToDoMutation();
   const [updateToDo] = useUpdateToDoMutation();
-  const { data: todos } = useGetToDosQuery();
+  const { data: todos } = useGetToDosQuery({ status, colors: selectedColors });
   const [input, setInput] = useState("");
 
   const handleInput = (e) => {

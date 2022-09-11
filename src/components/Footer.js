@@ -18,33 +18,19 @@ const numberOfTodos = (no_of_todos) => {
 };
 
 export default function Footer() {
-  const { data: todos, isLoading, isError } = useGetToDosQuery();
   const { selectedColors, status } = useSelector((state) => state.filters);
+  const {
+    data: todos,
+    isLoading,
+    isError,
+  } = useGetToDosQuery({ status: status, colors: selectedColors });
+
   const dispatch = useDispatch();
 
   const inCompletedToDo = todos?.filter(
     (todos) => todos.completed !== true && todos
   );
-  const completedTodo = todos?.filter(
-    (todos) => todos.completed === true && todos
-  );
 
-  // const todosRemaining = completed
-  //   ? completedTodo.length
-  //   : inCompletedToDo.length;
-  // // const { status, colors } = filters;
-  const filterByStatus = (todo, status) => {
-    switch (status) {
-      case "Complete":
-        return todo.completed;
-
-      case "Incomplete":
-        return !todo.completed;
-
-      default:
-        return todo;
-    }
-  };
   const handleStatusChange = (status) => {
     dispatch(statusChanged(status));
   };

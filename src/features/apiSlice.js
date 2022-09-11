@@ -8,11 +8,27 @@ export const apiSlice = createApi({
   tagTypes: ["allTodos"],
   endpoints: (builder) => ({
     getToDos: builder.query({
-      query: () => "/todos/?_sort=id&_order=desc",
+      query: ({ status, colors }) => {
+        let queryString = "";
+        if (colors.length > 0) {
+          queryString += colors.map((color) => `&color=${color}`).join("&");
+        }
+        if (status !== "") {
+          if (status === "Complete") {
+            queryString += "&completed=true";
+          } else if (status === "Incomplete") {
+            queryString += "&completed=false";
+          }
+        }
+        return {
+          url: `/todos/?_sort=id&_order=desc${queryString}`,
+          method: "GET",
+        };
+      },
       providesTags: ["allToDos"],
     }),
-    getFilteredToDos: builder.query({
-      query: ({ property, value }) => `/todos/?${property}=${value}`,
+    getSingleToDo: builder.query({
+      query: (id) => `/todos/?id=${id}`,
     }),
     addToDo: builder.mutation({
       query: (data) => ({
@@ -42,7 +58,7 @@ export const apiSlice = createApi({
 });
 export const {
   useGetToDosQuery,
-  useGetFilteredToDosQuery,
+  useGetSingleToDoQuery,
   useAddToDoMutation,
   useUpdateToDoMutation,
   useDeleteToDoMutation,
