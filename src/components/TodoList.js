@@ -4,7 +4,6 @@ import Todo from "./Todo";
 
 export default function TodoList() {
   const { status, selectedColors } = useSelector((state) => state.filters);
-  console.log(status);
   const {
     data: todos,
     isLoading,
